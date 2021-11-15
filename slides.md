@@ -3,7 +3,7 @@
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
-background: https://source.unsplash.com/collection/94734566/1920x1080
+background: https://images.unsplash.com/photo-1584949091598-c31daaaa4aa9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80
 # apply any windi css classes to the current slide
 class: 'text-center'
 # https://sli.dev/custom/highlighters.html
@@ -21,29 +21,8 @@ drawings:
   persist: false
 ---
 
-# Welcome to Slidev
-
-Presentation slides for developers
-
-<div class="pt-10">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
-
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub"
-    class="text-xl icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
-  </a>
-</div>
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
+# ES6 and beyond
+Short journey through ECMAScript evolution
 
 ---
 layout: center
@@ -51,8 +30,10 @@ layout: center
 
 # Evolution of javascript
 
-ECMAScript is a standard
-JavaScript is an implemention
+ECMAScript is a standard  
+JavaScript is an implemention  
+
+[Fun fact: JavaScript is a trademark of Oracle](https://trademarks.justia.com/750/26/javascript-75026640.html) 
 
 <v-clicks>
 
@@ -62,6 +43,21 @@ JavaScript is an implemention
 - ES2017
 - ...
 - ESNext
+
+</v-clicks>
+
+---
+layout: center
+---
+
+# ES5 - 2009
+
+<v-clicks>
+
+- Server side JS aka Node.js
+- package managers - npm, bower
+- modules - CommonJS, AMD, Browserify
+- JS preprocessors - Grunt, Gulp, Webpack, ...
 
 </v-clicks>
 
@@ -86,27 +82,6 @@ Members from large companies - Google, Apple, Facebook, MS, Intel...
 - Stage 4 : Finished : ready to be included in standard
 
 </v-clicks>
-
----
-layout: center
----
-
-# ES5 - 2009
-- Server side JS aka Node.js
-- package managers - npm, bower
-- modules - CommonJS, AMD, Browserify
-- JS preprocessors - Grunt, Gulp, Webpack, ...
-
----
-layout: center
----
-
-# ES5 - 2009
-- Server side JS aka Node.js
-- package managers - npm, bower
-- modules - CommonJS, AMD, Browserify
-- JS preprocessors - Grunt, Gulp, Webpack, ...
-
 
 ---
 layout: section
@@ -187,22 +162,22 @@ let x = 0;
 
 Less verbose, more expressive  
 
-```js
+```js {none|1|2|3|4|all}
 const odds = evens.map(v => v + 1);
 const pairs = evens.map(v => ({ even: v, odd: v + 1 }));
-const pairsArray = evens.map(v => ([v, v + 1]));
+const pairsArray = evens.map(v => [v, v + 1]);
 const nums = evens.map((v, i) => v + i);
 ```
 
 when using block syntax, `return` must be explicit
 
-```js
+```js {none|1}
 const add = (x, y) => { return x + y };
 ```
 
 fn without parameters
 
-```js
+```js {none|1}
 const logDocument = () => console.log(document);
 ```
 
@@ -211,11 +186,11 @@ const logDocument = () => console.log(document);
 
 They share lexical `this` with surrounding code  
 
-```js
+```js {none|all|2|3|4-6|all}
 function UiComponent() {
     const button = document.getElementById('myButton');
+    this.handleClick = () => console.log('clicked');
     button.addEventListener('click', () => {
-        console.log('CLICK');
         this.handleClick(); // lexical `this`
     });
 }
@@ -247,7 +222,7 @@ defaults
 
 give function parameters a default value
 
-```js
+```js {none|1-3|5|6|all}
 function tuple(x, y = 0) {
     return [x, y];
 }
@@ -259,7 +234,7 @@ tuple(10, 20); // output [10, 20]
 rest parameters
 
 aggregate remaining arguments into a single parameter
-```js
+```js {none|1-3|5|all}
 function func(x, y, ...a) {
     return (x + y) + a.length;
 }
@@ -271,7 +246,7 @@ func(1, 2, 'hello', true, 7); // output: 6
 <div>
 
 spread operator
-```js {all|2|all}
+```js {none|1-3|5|7-9|11-13|15-19|all}
 function addTwo(x, y) {
   return x + y;
 }
@@ -327,7 +302,7 @@ a total of ${card.amount * card.unitprice} bucks?
 
 Short-hand object properties
 
-```js
+```js {none|all}
 const first = 'John';
 const last = 'Doe';
 
@@ -338,7 +313,7 @@ const name = { first, last };
 
 Methods
 
-```js
+```js {none|all}
 const firstName = 'John';
 const lastName = 'Doe';
 
@@ -890,4 +865,64 @@ async function sendInParallel {
   ]);
 }
 ```
+---
+
+# Optional chaining
+?.  
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+```js
+let user = {};
+
+console.log(user.address.street.name);
+// TypeError: Cannot read properties of undefined
+
+if (user.address && user.address.street && user.address.street.name) {
+  console.log(user.address.street.name);
+}
+
+// with optional chaining
+console.log(user?.address?.street?.name); // undefined
+```
+
+</div>
+<div>
+
+```js
+// with dynamic key
+let key = 'firstName';
+
+let user1 = {
+  firstName: 'John'
+};
+
+let user2 = null;
+
+console.log( user1?.[key] ); // John
+console.log( user2?.[key] ); // undefined
+```
+
+</div>
+</div>
+
+---
+
+# Logical assignment
+
+```js
+x ||= y;
+x || (x = y);
+
+x &&= y;
+x && (x = y);
+
+x ??= y;
+x ?? (x = y);
+
+user.id = user.id || 1;
+user.id ||= 1;
+```
+
 ---
